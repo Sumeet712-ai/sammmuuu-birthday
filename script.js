@@ -174,19 +174,27 @@
       var scrollInSection = scrollY - sectionTop - headerOffset + viewH * 0.5;
       if (scrollInSection < 0) scrollInSection = 0;
 
-      // ── Preload next section's first few cards if we are close to end ──
-      if (isActive && cardsToReveal >= state.totalCards - 2 && idx + 1 < sectionStates.length) {
-        var nextState = sectionStates[idx + 1];
-        for (var j = 0; j < Math.min(3, nextState.totalCards); j++) {
-          loadCardImage(nextState.cards[j]);
-        }
-      }
-
-      // ── Toggle gallery visibility ──
+      // ── Toggle gallery visibility & PRELOAD IMAGES ──
       if (isActive && !state.isFixed) {
         state.gallery.classList.add('gallery--fixed');
         if (!isMobile) state.gallery.style.left = '70%';
         state.isFixed = true;
+        
+        // Load ALL images for the current section instantly in the background
+        if (!state.imagesLoaded) {
+          state.imagesLoaded = true;
+          for (var c1 = 0; c1 < state.totalCards; c1++) {
+            loadCardImage(state.cards[c1]);
+          }
+        }
+        
+        // Also preload ALL images for the NEXT section
+        if (idx + 1 < sectionStates.length && !sectionStates[idx + 1].imagesLoaded) {
+          sectionStates[idx + 1].imagesLoaded = true;
+          for (var c2 = 0; c2 < sectionStates[idx + 1].totalCards; c2++) {
+            loadCardImage(sectionStates[idx + 1].cards[c2]);
+          }
+        }
       } else if (!isActive && state.isFixed) {
         state.gallery.classList.remove('gallery--fixed');
         state.gallery.style.left = '';
@@ -200,11 +208,6 @@
 
       for (var i = 0; i < state.totalCards; i++) {
         var card = state.cards[i];
-        
-        // ── Load image just before it's needed (preload +3 cards ahead) ──
-        if (isActive && i <= cardsToReveal + 3) {
-          loadCardImage(card);
-        }
 
         if (i < cardsToReveal) {
           if (!card.classList.contains('photo-card--stacked')) {
