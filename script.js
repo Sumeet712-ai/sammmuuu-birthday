@@ -37,43 +37,48 @@
         var cardDir = (i % 2 === 0) ? 'left' : 'right';
         card.className = 'photo-card photo-card--offscreen-' + cardDir;
         var imgSrc = 'assets/' + folder + '/' + (i + 1) + '.jpg?v=' + cacheBuster;
-        card.style.setProperty('--bg-img', "url('" + imgSrc + "')");
+        // ── LAZY: Don't set src or --bg-img yet. Store URL for later. ──
         card.dataset.index = i;
         card.dataset.direction = cardDir;
         card.dataset.src = imgSrc;
 
         var g = gradients[i % gradients.length];
         var emoji = emojiPool[i % emojiPool.length];
-        card.innerHTML = '<img class="photo-card__img" src="' + imgSrc + '" alt="Memory ' + (i+1) + '" loading="lazy" />' +
+        card.innerHTML = '<img class="photo-card__img" alt="Memory ' + (i+1) + '" />' +
           '<div class="photo-card__placeholder" style="background:linear-gradient(135deg,' + g[0] + ',' + g[1] + ',' + g[2] + ')"><span class="p-emoji">' + emoji + '</span><span class="p-num">' + (i + 1) + '</span></div>';
 
         gallery.appendChild(card);
       }
-
-      // Check which images exist
-      checkSectionImages(gallery);
     });
   }
 
-  function checkSectionImages(gallery) {
+  // ── Load images for a section on demand ──
+  function loadSectionImages(gallery) {
     var cards = gallery.querySelectorAll('.photo-card');
     cards.forEach(function(card) {
       var imgEl = card.querySelector('.photo-card__img');
-      if (imgEl) {
-        var hidePlace = function() {
-          var p = card.querySelector('.photo-card__placeholder');
-          if (p) {
-            p.style.transition = 'opacity 0.6s ease';
-            p.style.opacity = '0';
-            setTimeout(function(){ p.style.display = 'none'; }, 600);
-          }
-        };
-        if (imgEl.complete && imgEl.naturalWidth > 0) {
-          hidePlace();
-        } else {
-          imgEl.onload = hidePlace;
-          imgEl.onerror = function() { imgEl.style.display = 'none'; };
+      var src = card.dataset.src;
+      if (!imgEl || !src) return;
+
+      // Set the blurred background
+      card.style.setProperty('--bg-img', "url('" + src + "')");
+
+      // Set the real image src to start downloading
+      imgEl.src = src;
+
+      var hidePlace = function() {
+        var p = card.querySelector('.photo-card__placeholder');
+        if (p) {
+          p.style.transition = 'opacity 0.6s ease';
+          p.style.opacity = '0';
+          setTimeout(function(){ p.style.display = 'none'; }, 600);
         }
+      };
+      if (imgEl.complete && imgEl.naturalWidth > 0) {
+        hidePlace();
+      } else {
+        imgEl.onload = hidePlace;
+        imgEl.onerror = function() { imgEl.style.display = 'none'; };
       }
     });
   }
@@ -129,7 +134,8 @@
         headerHeight: headerHeight,
         needsFan: needsFan,
         isFanned: false,
-        isFixed: false
+        isFixed: false,
+        imagesLoaded: false
       });
     });
 
@@ -167,6 +173,17 @@
       var headerOffset = isMobile ? state.headerHeight : 0;
       var scrollInSection = scrollY - sectionTop - headerOffset + viewH * 0.5;
       if (scrollInSection < 0) scrollInSection = 0;
+
+      // ── Lazy-load images when section first becomes active ──
+      if (isActive && !state.imagesLoaded) {
+        state.imagesLoaded = true;
+        loadSectionImages(state.gallery);
+        // Also preload the NEXT section so it's ready when user arrives
+        if (idx + 1 < sectionStates.length && !sectionStates[idx + 1].imagesLoaded) {
+          sectionStates[idx + 1].imagesLoaded = true;
+          loadSectionImages(sectionStates[idx + 1].gallery);
+        }
+      }
 
       // ── Toggle gallery visibility ──
       if (isActive && !state.isFixed) {
