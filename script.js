@@ -112,6 +112,12 @@
       section.style.minHeight = totalScrollNeeded + 'px';
       section.style.position = 'relative';
 
+      // ── CRITICAL FIX: Move gallery to <body> so that the parent
+      //    .reveal's transform (translateY) never breaks position:fixed.
+      //    CSS spec: any ancestor with transform makes position:fixed
+      //    relative to that ancestor, not the viewport. ──
+      document.body.appendChild(gallery);
+
       sectionStates.push({
         section: section,
         gallery: gallery,
@@ -136,11 +142,25 @@
     var viewH = window.innerHeight;
     var isMobile = window.innerWidth <= 900;
 
-    sectionStates.forEach(function(state) {
-      var rect = state.section.getBoundingClientRect();
+    // Track which section is most "in view" so only ONE gallery shows at a time
+    var bestIdx = -1;
+    var bestScore = -Infinity;
 
-      // Gallery is ACTIVE whenever the section is on screen
-      var isActive = rect.top < viewH && rect.bottom > 0;
+    sectionStates.forEach(function(state, idx) {
+      var rect = state.section.getBoundingClientRect();
+      // Score: how centered the section is (higher = more visible)
+      var visibleTop = Math.max(rect.top, 0);
+      var visibleBot = Math.min(rect.bottom, viewH);
+      var visiblePx = visibleBot - visibleTop;
+      if (visiblePx > bestScore) {
+        bestScore = visiblePx;
+        bestIdx = idx;
+      }
+    });
+
+    sectionStates.forEach(function(state, idx) {
+      var rect = state.section.getBoundingClientRect();
+      var isActive = (idx === bestIdx) && bestScore > 0;
 
       // How far we've scrolled into this section (0 = just entered)
       var sectionTop = rect.top + scrollY;
@@ -148,7 +168,7 @@
       var scrollInSection = scrollY - sectionTop - headerOffset + viewH * 0.5;
       if (scrollInSection < 0) scrollInSection = 0;
 
-      // ── Toggle gallery fixed positioning ──
+      // ── Toggle gallery visibility ──
       if (isActive && !state.isFixed) {
         state.gallery.classList.add('gallery--fixed');
         if (!isMobile) state.gallery.style.left = '70%';
@@ -434,7 +454,7 @@
       entries.forEach(function(e) {
         if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
       });
-    }, { threshold: .12, rootMargin: '0px 0px -60px 0px' });
+    }, { threshold: 0, rootMargin: '0px 0px -60px 0px' });
     els.forEach(function(el) { obs.observe(el); });
 
     var cObs = new IntersectionObserver(function(entries) {
