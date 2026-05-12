@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A special birthday surprise for Sammmuuu!" />
+  <title>🎂 Happy Birthday Sammmuuu!</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&family=Great+Vibes&display=swap"
+    rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+
+<body>
+
+  <!-- LANDING -->
+  <section id="landing" class="landing">
+    <div class="landing__particles" id="bgParticles"></div>
+    <div class="landing__glow"></div>
+    <div class="landing__content">
+      <p class="landing__pretext">Hey Sammmuuu... I made something for you 💕</p>
+      <div class="gift-scene" id="giftBox">
+        <div class="gift-box" id="giftBoxInner">
+          <!-- Lid -->
+          <div class="gift-lid" id="giftLid">
+            <div class="gift-lid__face gift-lid__face--top"></div>
+            <div class="gift-lid__face gift-lid__face--front"></div>
+            <div class="gift-lid__face gift-lid__face--back"></div>
+            <div class="gift-lid__face gift-lid__face--left"></div>
+            <div class="gift-lid__face gift-lid__face--right"></div>
+            <div class="gift-bow">🎀</div>
+          </div>
+          <!-- Base -->
+          <div class="gift-base">
+            <div class="gift-base__face gift-base__face--front"></div>
+            <div class="gift-base__face gift-base__face--back"></div>
+            <div class="gift-base__face gift-base__face--left"></div>
+            <div class="gift-base__face gift-base__face--right"></div>
+            <div class="gift-base__face gift-base__face--bottom"></div>
+          </div>
+          <!-- Sparkles inside -->
+          <div class="gift-sparkles" id="giftSparkles"></div>
+        </div>
+      </div>
+      <p class="landing__cta">Tap the box to open your surprise ✨</p>
+    </div>
+  </section>
+
+  <canvas id="confettiCanvas"></canvas>
+
+  <!-- MEMORY LANE -->
+  <main id="memoryLane" class="memory-lane">
+    <div id="floatingJokes" class="floating-jokes"></div>
+
+    <!-- Hero -->
+    <section class="hero">
+      <div class="hero__bg-gradient"></div>
+      <div class="hero__content">
+        <p class="hero__subtitle reveal reveal--scale">Happy Birthday</p>
+        <h1 class="hero__title reveal reveal--up reveal--delay-1">Sammmuuu! 🎉</h1>
+        <p class="hero__message reveal reveal--up reveal--delay-2">Today is all about celebrating YOU — the most
+          incredible person I know. Scroll down to relive some of our best moments together.</p>
+        <div class="hero__scroll-indicator reveal reveal--up reveal--delay-3">
+          <span>Scroll Down</span>
+          <div class="hero__scroll-arrow"></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEMORY SECTIONS -->
+    <section class="memories">
+      <div class="memories__floating-shape memories__floating-shape--1"></div>
+      <div class="memories__floating-shape memories__floating-shape--2"></div>
+      <div class="memories__floating-shape memories__floating-shape--3"></div>
+
+      <!-- 1. Our First Day — 1 photo -->
+      <div class="memory-section reveal reveal--up" data-folder="1-first-day" data-count="1" data-direction="left">
+        <div class="memory-section__header">
+          <span class="memory-section__tag">📸 Our First Day</span>
+          <h2 class="memory-section__title">Where It All Began</h2>
+          <p class="memory-section__text">The day we first met! I had no idea you'd become such an important part of my
+            life. Thank god for that day — it gave me you. 💛</p>
+        </div>
+        <div class="memory-section__gallery"></div>
+        <div class="memory-section__fan"></div>
+      </div>
+
+      <!-- 2. Late Night Study Call — 5 photos -->
+      <div class="memory-section reveal reveal--up" data-folder="2-study-call" data-count="5" data-direction="right">
+        <div class="memory-section__header">
+          <span class="memory-section__tag">📚 Late Night Study Call</span>
+          <h2 class="memory-section__title">Padhai & Baatein</h2>
+          <p class="memory-section__text">Those "just 10 more minutes" calls that turned into hours. More gossip than
+            studies, but hey — we passed! Our study sessions are legendary. 😂📖</p>
+        </div>
+        <div class="memory-section__gallery"></div>
+        <div class="memory-section__fan"></div>
+      </div>
+
+      <!-- 3. Garba — 10 photos -->
+      <div class="memory-section reveal reveal--up" data-folder="3-garba" data-count="10" data-direction="left">
+        <div class="memory-section__header">
+          <span class="memory-section__tag">🪔 Garba Dumps</span>
+          <h2 class="memory-section__title">Dandiya Nights & Desi Vibes</h2>
+          <p class="memory-section__text">Navratri with you is something else! The matching outfits, the
+            terrible-but-enthusiastic garba moves, and the endless laughing. You made every night magical. 🩷🪩</p>
+        </div>
+        <div class="memory-section__gallery"></div>
+        <div class="memory-section__fan"></div>
+      </div>
+
+      <!-- 4. Best Picnic Ever — 27 photos -->
+      <div class="memory-section reveal reveal--up" data-folder="4-picnic" data-count="27" data-direction="right">
+        <div class="memory-section__header">
+          <span class="memory-section__tag">🧺 Best Picnic Ever</span>
+          <h2 class="memory-section__title">That Perfect Day Out</h2>
+          <p class="memory-section__text">Good food, great weather, and even greater company. This day was pure
+            happiness. I'd rewind to this moment a hundred times. ☀️🌿</p>
+        </div>
+        <div class="memory-section__gallery"></div>
+        <div class="memory-section__fan"></div>
+      </div>
+
+      <!-- 5. Masti — 16 photos -->
+      <div class="memory-section reveal reveal--up" data-folder="5-masti" data-count="16" data-direction="left">
+        <div class="memory-section__header">
+          <span class="memory-section__tag">😜 Thodi Masti</span>
+          <h2 class="memory-section__title">Pagalpan At Its Best</h2>
+          <p class="memory-section__text">Our brand of chaos is unmatched. From random dancing to the weirdest inside
+            jokes — nobody does masti like us. You bring out the craziest (and best) version of me! 🤪🎊</p>
+        </div>
+        <div class="memory-section__gallery"></div>
+        <div class="memory-section__fan"></div>
+      </div>
+
+      <!-- 6. Pyaar — 20 photos -->
+      <div class="memory-section reveal reveal--up" data-folder="6-pyaar" data-count="20" data-direction="right">
+        <div class="memory-section__header">
+          <span class="memory-section__tag memory-section__tag--special">💖 Our Special Chapter</span>
+          <h2 class="memory-section__title">Because Every Moment With You Is Love</h2>
+          <p class="memory-section__text">This one's the big one. Every smile, every hug, every silly selfie — all proof
+            that we have something so special. You are my person, Sammmuuu. Through everything. 🤍✨</p>
+        </div>
+        <div class="memory-section__gallery"></div>
+        <div class="memory-section__fan"></div>
+      </div>
+
+      <!-- 7. Foodie — 11 photos -->
+      <div class="memory-section reveal reveal--up" data-folder="8-foodie" data-count="11" data-direction="left">
+        <div class="memory-section__header">
+          <span class="memory-section__tag">🍕 Foodie Us</span>
+          <h2 class="memory-section__title">Partners in Crime (And Calories)</h2>
+          <p class="memory-section__text">From street food raids to fancy dinners — our friendship runs on food. "Kya
+            khayein?" is basically our love language. Here's to a million more meals together! 🍔🍦🫶</p>
+        </div>
+        <div class="memory-section__gallery"></div>
+        <div class="memory-section__fan"></div>
+      </div>
+    </section>
+
+    <!-- Compliments -->
+    <section class="compliments reveal reveal--up">
+      <h2 class="compliments__heading">Reasons Why Sammmuuu Is The Best ✨</h2>
+      <div class="compliments__grid">
+        <div class="compliment-card"><span class="compliment-card__emoji" data-emoji="💖">💖</span>
+          <p>You have the kindest, purest heart I've ever known</p>
+        </div>
+        <div class="compliment-card"><span class="compliment-card__emoji" data-emoji="😂">😂</span>
+          <p>Your laugh is the most infectious sound in the world</p>
+        </div>
+        <div class="compliment-card"><span class="compliment-card__emoji" data-emoji="🌈">🌈</span>
+          <p>You bring so much color & warmth into everyone's life</p>
+        </div>
+        <div class="compliment-card"><span class="compliment-card__emoji" data-emoji="🧠">🧠</span>
+          <p>Your intelligence & wit never cease to amaze me</p>
+        </div>
+        <div class="compliment-card"><span class="compliment-card__emoji" data-emoji="💪">💪</span>
+          <p>You're way stronger than you give yourself credit for</p>
+        </div>
+        <div class="compliment-card"><span class="compliment-card__emoji" data-emoji="🌟">🌟</span>
+          <p>The world is genuinely better because you're in it</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Finale -->
+    <section class="finale reveal reveal--scale">
+      <div class="finale__glow"></div>
+      <div class="finale__content">
+        <div class="cake-container">
+          <!-- Realistic CSS Cake -->
+          <div class="cake-3d">
+            <!-- Cake plate -->
+            <div class="cake-plate"></div>
+            <!-- Bottom layer -->
+            <div class="cake-layer cake-layer--bottom">
+              <div class="cake-frosting cake-frosting--bottom"></div>
+              <div class="cake-drip cake-drip--1"></div>
+              <div class="cake-drip cake-drip--2"></div>
+              <div class="cake-drip cake-drip--3"></div>
+              <div class="cake-drip cake-drip--4"></div>
+              <div class="cake-drip cake-drip--5"></div>
+            </div>
+            <!-- Top layer -->
+            <div class="cake-layer cake-layer--top">
+              <div class="cake-frosting cake-frosting--top"></div>
+              <div class="cake-drip cake-drip--6"></div>
+              <div class="cake-drip cake-drip--7"></div>
+              <div class="cake-drip cake-drip--8"></div>
+            </div>
+            <!-- Sprinkles -->
+            <div class="cake-sprinkles">
+              <span style="left:15%;top:55%;background:#ff6b9d"></span>
+              <span style="left:30%;top:60%;background:#fbbf24"></span>
+              <span style="left:50%;top:52%;background:#c084fc"></span>
+              <span style="left:70%;top:58%;background:#34d399"></span>
+              <span style="left:85%;top:54%;background:#60a5fa"></span>
+              <span style="left:20%;top:80%;background:#fbbf24"></span>
+              <span style="left:40%;top:85%;background:#ff6b9d"></span>
+              <span style="left:65%;top:82%;background:#c084fc"></span>
+              <span style="left:80%;top:78%;background:#34d399"></span>
+            </div>
+            <!-- Candle -->
+            <div class="candle-realistic" id="candle">
+              <div class="candle-wick"></div>
+              <div class="flame-realistic" id="flame">
+                <div class="flame-outer"></div>
+                <div class="flame-inner"></div>
+                <div class="flame-core"></div>
+                <div class="flame-glow"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <h2 class="finale__title" id="finaleTitle">Make a Wish...</h2>
+        <button id="blowBtn" class="blow-btn">Blow out the candle 🌬️</button>
+
+        <div class="finale__hidden-surprise" id="finaleSurprise">
+          <p class="finale__subtitle">Tap the seal to reveal a secret message 💌</p>
+          <div class="finale__seal" id="seal">
+            <div class="finale__seal-front"><span>💌</span></div>
+            <div class="finale__seal-back"><span>💕</span></div>
+          </div>
+          <!-- Secret message card (shown on seal tap) -->
+          <div class="finale__msg-card" id="secretMsgCard">
+            <p class="finale__secret-msg">You are not just my friend — you are my family. No matter where life takes us,
+              you'll always be my favourite person. I hope this year gives you everything your beautiful soul deserves.
+              Love you endlessly, Sammmuuu! 🤍</p>
+          </div>
+          <div class="finale__wish">
+            <p class="finale__wish-text">Happy Birthday Sammmuuu! 🥳🎉🎈</p>
+            <p class="finale__from">— With all my love, Summmiii 💕</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Photo Lightbox -->
+  <div class="photo-lightbox" id="photoLightbox">
+    <button class="photo-lightbox__close" id="lightboxClose">✕</button>
+    <button class="photo-lightbox__nav photo-lightbox__nav--prev" id="lightboxPrev">‹</button>
+    <button class="photo-lightbox__nav photo-lightbox__nav--next" id="lightboxNext">›</button>
+    <img class="photo-lightbox__img" id="lightboxImg" src="" alt="Photo" />
+    <span class="photo-lightbox__counter" id="lightboxCounter"></span>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+
+</html>
