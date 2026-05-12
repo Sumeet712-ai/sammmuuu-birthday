@@ -36,7 +36,7 @@
         // Alternate directions: even index comes from left, odd comes from right
         var cardDir = (i % 2 === 0) ? 'left' : 'right';
         card.className = 'photo-card photo-card--offscreen-' + cardDir;
-        var imgSrc = 'assets/' + folder + '/' + (i + 1) + '.jpg?v=' + cacheBuster;
+        var imgSrc = 'assets/' + folder + '/' + (i + 1) + '.jpg';
         // ── LAZY: Don't set src or --bg-img yet. Store URL for later. ──
         card.dataset.index = i;
         card.dataset.direction = cardDir;
@@ -52,35 +52,35 @@
     });
   }
 
-  // ── Load images for a section on demand ──
-  function loadSectionImages(gallery) {
-    var cards = gallery.querySelectorAll('.photo-card');
-    cards.forEach(function(card) {
-      var imgEl = card.querySelector('.photo-card__img');
-      var src = card.dataset.src;
-      if (!imgEl || !src) return;
+  // ── Load single image on demand ──
+  function loadCardImage(card) {
+    if (card.dataset.loaded) return;
+    card.dataset.loaded = 'true';
+    
+    var imgEl = card.querySelector('.photo-card__img');
+    var src = card.dataset.src;
+    if (!imgEl || !src) return;
 
-      // Set the blurred background
-      card.style.setProperty('--bg-img', "url('" + src + "')");
+    // Set the blurred background
+    card.style.setProperty('--bg-img', "url('" + src + "')");
 
-      // Set the real image src to start downloading
-      imgEl.src = src;
+    // Set the real image src to start downloading
+    imgEl.src = src;
 
-      var hidePlace = function() {
-        var p = card.querySelector('.photo-card__placeholder');
-        if (p) {
-          p.style.transition = 'opacity 0.6s ease';
-          p.style.opacity = '0';
-          setTimeout(function(){ p.style.display = 'none'; }, 600);
-        }
-      };
-      if (imgEl.complete && imgEl.naturalWidth > 0) {
-        hidePlace();
-      } else {
-        imgEl.onload = hidePlace;
-        imgEl.onerror = function() { imgEl.style.display = 'none'; };
+    var hidePlace = function() {
+      var p = card.querySelector('.photo-card__placeholder');
+      if (p) {
+        p.style.transition = 'opacity 0.6s ease';
+        p.style.opacity = '0';
+        setTimeout(function(){ p.style.display = 'none'; }, 600);
       }
-    });
+    };
+    if (imgEl.complete && imgEl.naturalWidth > 0) {
+      hidePlace();
+    } else {
+      imgEl.onload = hidePlace;
+      imgEl.onerror = function() { imgEl.style.display = 'none'; };
+    }
   }
 
   // ═══════════════════════════════════════════
@@ -174,14 +174,11 @@
       var scrollInSection = scrollY - sectionTop - headerOffset + viewH * 0.5;
       if (scrollInSection < 0) scrollInSection = 0;
 
-      // ── Lazy-load images when section first becomes active ──
-      if (isActive && !state.imagesLoaded) {
-        state.imagesLoaded = true;
-        loadSectionImages(state.gallery);
-        // Also preload the NEXT section so it's ready when user arrives
-        if (idx + 1 < sectionStates.length && !sectionStates[idx + 1].imagesLoaded) {
-          sectionStates[idx + 1].imagesLoaded = true;
-          loadSectionImages(sectionStates[idx + 1].gallery);
+      // ── Preload next section's first few cards if we are close to end ──
+      if (isActive && cardsToReveal >= state.totalCards - 2 && idx + 1 < sectionStates.length) {
+        var nextState = sectionStates[idx + 1];
+        for (var j = 0; j < Math.min(3, nextState.totalCards); j++) {
+          loadCardImage(nextState.cards[j]);
         }
       }
 
@@ -203,6 +200,12 @@
 
       for (var i = 0; i < state.totalCards; i++) {
         var card = state.cards[i];
+        
+        // ── Load image just before it's needed (preload +3 cards ahead) ──
+        if (isActive && i <= cardsToReveal + 3) {
+          loadCardImage(card);
+        }
+
         if (i < cardsToReveal) {
           if (!card.classList.contains('photo-card--stacked')) {
             card.classList.remove('photo-card--offscreen-left', 'photo-card--offscreen-right');
